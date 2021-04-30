@@ -7,7 +7,8 @@ import { Contact } from './contact.model'
   styleUrls: ['./contacts.component.css']
 })
 export class ContactsComponent implements OnInit {
-  contacts: Contact[] = [];
+  //selectedContact: Contact[] = [];
+  selectedContact: Contact;
 
   constructor() { }
 
@@ -15,3 +16,4 @@ export class ContactsComponent implements OnInit {
   }
 
 }
+
