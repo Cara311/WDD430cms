@@ -3,7 +3,6 @@ import { Message } from '../messages.model';
 import { MessageService } from '../message.service';
 import { ContactService } from '../../contacts/contact.service';
 import { Contact } from '../../contacts/contact.model';
-import { fromEventPattern } from 'rxjs';
 
 @Component({
   selector: 'app-message-item',

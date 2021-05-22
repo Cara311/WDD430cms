@@ -8,6 +8,9 @@ import { EventEmitter } from '@angular/core';
 })
 
 export class MessageService {
+    messageChangedEvent = new EventEmitter<Message[]>();
+
+
     messages: Message [] =[];
      constructor() {
         this.messages = MOCKMESSAGES;
@@ -24,4 +27,10 @@ export class MessageService {
     }
     return null;
   }
+
+  addMessage(message: Message) {
+    this.messages.push(message);
+    this.messageChangedEvent.emit(this.messages.slice());
+}
+
 }
