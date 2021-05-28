@@ -10,6 +10,7 @@ import { DocumentService } from '../document.service';
 export class DocumentItemComponent implements OnInit {
 
   @Input() document: Document;
+  @Input() index: number;
   //@Output() documentSelected = new EventEmitter<void>();
 
   constructor(private documentService: DocumentService) { }
@@ -17,10 +18,10 @@ export class DocumentItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSelectedDocument() {
+  /*onSelectedDocument() {
     //this.documentSelected.emit();
     this.documentService.documentSelectedEvent.emit(this.document);
-  }
+  } */
 
 }
 

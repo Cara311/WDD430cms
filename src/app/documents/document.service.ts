@@ -18,12 +18,16 @@ import { Document } from './document.model';
         return this.documents.slice(); //Returns a copy of array
     }  
 
-  getDocument(id: string) {
-    for (let document of this.documents) {
+  getDocument(index: string) {
+    return this.documents[index];
+  }
+
+
+    /*for (let document of this.documents) {
       if (document.id === id) {
         return document;
       } 
     }
     return null;
-  }
+  }*/
 }
