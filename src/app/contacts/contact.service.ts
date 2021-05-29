@@ -18,13 +18,18 @@ import { EventEmitter } from '@angular/core';
         return this.contacts.slice(); //Returns a copy of array
     }  
 
-  getContact(id: string) {
-    for (let contact of this.contacts) {
+  getContact(index:string) {
+    /* for (let contact of this.contacts) {
       if (contact.id === id) {
         return contact;
       } 
     }
-    return null;
+    return null;  */
+    return this.contacts[index];
+   
   }
+
+  
+
 
   }
