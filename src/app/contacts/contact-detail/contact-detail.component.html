@@ -12,8 +12,8 @@
                         <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="image-responsive" style="max-height: 300px;" *ngIf="contact.imageUrl !== ' '">
                     </div>
                     <div class="col-sm-6 text-right">
-                        <button class="btn btn-primary">Edit</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <a class="btn btn-primary" routerLink="edit">Edit</a>
+                        <a class="btn btn-danger" (click)="onDelete()">Delete</a>
                     </div>
                 </div>
             </div>

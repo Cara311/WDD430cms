@@ -7,15 +7,16 @@
                         <h2 class="list-group-item-heading">Contacts</h2>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <button class="btn btn-success">New Contact</button>
+                        <a routerLink="new" class="btn btn-success">New Contact</a>
                     </div>
                 </div>
             </div>
             <div class="panel-body">
                 <app-contact-item 
-                *ngFor="let contactEl of contacts"
+                *ngFor="let contactEl of contacts; let i = index"
                 [contact]="contactEl" 
-                (contactSelected)="onSelected(contactEl)"></app-contact-item> 
+                [index]="i"
+                ></app-contact-item> 
             </div>
         </div>
     </div>
