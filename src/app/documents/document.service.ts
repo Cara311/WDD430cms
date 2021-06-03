@@ -56,7 +56,7 @@ getMaxId(): number {
 
 
 addDocument(newDocument: Document) {
-  if (newDocument === undefined || newDocument === null) {
+  if (!newDocument) {
     return;
   }
   this.maxDocumentId++
@@ -69,7 +69,7 @@ addDocument(newDocument: Document) {
 
 
 updateDocument(originalDocument: Document, newDocument: Document) {
-  if (originalDocument || newDocument === null) {
+  if (!originalDocument || !newDocument) {
     return;
   }
   const pos = this.documents.indexOf(originalDocument);
