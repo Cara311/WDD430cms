@@ -41,7 +41,7 @@ export class ContactEditComponent implements OnInit {
         this.contact = JSON.parse(JSON.stringify(this.originalContact));
      
         if(this.contact.group) {
-          this.originalContact.group = JSON.parse(JSON.stringify(this.groupContacts));
+          this.groupContacts = JSON.parse(JSON.stringify(this.contact.group));
         }  
       }
     )
@@ -55,7 +55,7 @@ export class ContactEditComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     const value = form.value;
-    const newContact = new Contact(value.id, value.name, value.email, value.phone, value.imageUrl, value.groupContacts);
+    const newContact = new Contact(value.id, value.name, value.email, value.phone, value.imageUrl, this.groupContacts);
 
     if (this.editMode) {
       this.contactService.updateDocument(this.originalContact, newContact);
