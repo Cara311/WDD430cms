@@ -27,41 +27,46 @@ export class ContactEditComponent implements OnInit {
     .subscribe(
       (params: Params) => {
         this.id = params['id'];
+        if (!this.id) {
+          this.editMode = false;
+          return;
+        }
+    
+        this.originalContact = this.contactService.getContact(this.id);
+    
+        if(!this.originalContact) {
+          return;
+        }
+        this.editMode = true;
+        this.contact = JSON.parse(JSON.stringify(this.originalContact));
+     
+        if(this.contact.group) {
+          this.originalContact.group = JSON.parse(JSON.stringify(this.groupContacts));
+        }  
       }
     )
-    if (!this.id) {
-      this.editMode = false;
-      return;
-    }
-
-    this.originalContact = this.contactService.getContact(this.id);
-
-    if(!this.originalContact) {
-      return;
-    }
-    this.editMode = true;
-    this.contact = JSON.parse(JSON.stringify(this.originalContact));
- 
-    if(!this.contact.group) {
-      this.originalContact.group = JSON.parse(JSON.stringify(this.groupContacts));
-    }  
+    
   }
 
 
   onCancel() {
     this.router.navigateByUrl("/contacts");
-
   }
+
   onSubmit(form: NgForm) {
     const value = form.value;
-    const newContact = new Contact(value.id, value.name, value.email, value.phone, value.imageUrl, value.group);
+    const newContact = new Contact(value.id, value.name, value.email, value.phone, value.imageUrl, value.groupContacts);
+
     if (this.editMode) {
       this.contactService.updateDocument(this.originalContact, newContact);
+      //console.log(newContact);
+      newContact.group = this.groupContacts;
     } else {
       this.contactService.addContact(newContact);
     }
     this.router.navigateByUrl("/contacts");
   }
+
   
   isInvalidContact(newContact: Contact) {
     if (!newContact) {// newContact has no value

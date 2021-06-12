@@ -23,24 +23,23 @@ export class DocumentEditComponent implements OnInit {
 }
 
   ngOnInit() {
-    this.route.params
-    .subscribe(
-      (params: Params) => {
-        this.id = params['id'];
-      }
-    )
-    if (!this.id) {
-      this.editMode = false;
-      return;
-    }
-
-    this.originalDocument = this.documentService.getDocument(this.id);
-
-    if(!this.originalDocument) {
-      return;
-    }
-    this.editMode = true;
-    this.document = JSON.parse(JSON.stringify(this.originalDocument));
+    
+      this.route.params.subscribe(
+        (params: Params) => {
+          this.id=params['id'];
+          if (!this.id) {
+            this.editMode = false;
+            return;
+          }
+          this.originalDocument = this.documentService.getDocument(this.id);
+          if (!this.originalDocument) {
+            return;
+          }
+          this.editMode = true;
+          this.document = JSON.parse(JSON.stringify(this.originalDocument));
+        }
+      );
+    
 
   }
 
