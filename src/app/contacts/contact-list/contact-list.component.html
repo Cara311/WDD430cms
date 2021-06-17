@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <!-- <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-6">
                         <h2 class="list-group-item-heading">Contacts</h2>
@@ -10,10 +10,30 @@
                         <a routerLink="new" class="btn btn-success">New Contact</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
+            <div class="row">
+                <div class="col-xs-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <div class="row">
+                        <span class="title pad-left-right">Contacts</span>
+                      </div>
+                      <div class="row">
+                        <div class="input-group pull-left pad-left-right col-xs-7">
+                          <input class="form-control" type="text" #searchBox (keyup)="search(searchBox.value)" placeholder="Enter a search value">
+                          <div class="glyphicon glyphicon-search input-group-addon" (click)="search(searchBox.value)"></div>
+                        </div>
+                        <div class="pull-right pad-left-right">
+                          <a class="btn btn-success" [routerLink]="['new']">New Contact</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             <div class="panel-body">
                 <app-contact-item 
-                *ngFor="let contactEl of contacts; let i = index"
+                *ngFor="let contactEl of contacts | contactsFilter: term; let i = index;" 
                 [contact]="contactEl" 
                 [index]="i"
                 dnd-draggable [dragEnabled]="true" [dragData]="contactEl" [dropZones]="['contactGroup']"
