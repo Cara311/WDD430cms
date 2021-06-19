@@ -23,7 +23,8 @@ export class DocumentService {
     this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/documents.json').subscribe((DBDocs: Document[]) => {
       this.documents = DBDocs;
       this.maxDocumentId = this.getMaxId();
-      this.documents = this.documents.sort((a, b) => a.name > b.name ? 1 : 0);
+      this.documents.sort((a, b) => a.name < b.name ? -1 : 0);
+      //this.documents = this.documents.sort((a, b) => a.name > b.name ? 1 : 0);
       this.documentListChangedEvent.next(this.documents.slice());
 
     }, (error: any) => {

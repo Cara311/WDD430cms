@@ -26,7 +26,7 @@ export class ContactService {
     this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/contacts.json').subscribe((DBContacts: Contact[]) => {
       this.contacts = DBContacts;
       this.maxContactId = this.getMaxId();
-      this.contacts = this.contacts.sort((a, b) => a.name > b.name ? 1 : 0);
+      //this.contacts.sort((a, b) => a.name < b.name ? -1 : 0);
       this.contactListChangedEvent.next(this.contacts.slice());
 
     }, (error: any) => {

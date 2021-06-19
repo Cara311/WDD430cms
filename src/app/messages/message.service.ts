@@ -21,7 +21,6 @@ export class MessageService {
         this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/messages.json').subscribe((DBMessages: Message[]) => {
           this.messages = DBMessages;
           this.maxMessageId = this.getMaxId();
-          this.messages= this.messages.sort((a, b) => a.id > b.id ? 1 : 0);
         
           this.messageChangedEvent.next(this.messages.slice());
     
