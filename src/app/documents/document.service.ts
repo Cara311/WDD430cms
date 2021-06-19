@@ -3,6 +3,7 @@ import {MOCKDOCUMENTS} from './MOCKDOCUMENTS';
 import { EventEmitter } from '@angular/core';
 import { Document } from './document.model';
 import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -12,17 +13,43 @@ import { Subject } from 'rxjs';
     documentSelectedEvent = new EventEmitter<Document>();
     documentChangedEvent = new EventEmitter<Document[]>();
 
-     documents: Document [] = [];
+     documents: Document[] = [];
      maxDocumentId: number; 
 
-     constructor() {
-        this.documents = MOCKDOCUMENTS;
-        this.maxDocumentId = this.getMaxId();
+     constructor(private http: HttpClient) {
+      //this.documents = MOCKDOCUMENTS;
+      //this.maxDocumentId = this.getMaxId();
+        this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/documents.json')
+        .subscribe(this.documents: Document[]) => {
+          this.documents = documents;
+          this.maxDocumentId = this.getMaxId();
+          this.documents.sort();
+          
+          //sort
+        }
+        (error: any) => {
+          console.log("error");
+        } 
      }
+
+
+     storeDocuments() {
+      const documents = this.getDocuments();
+      this.http
+        .put(
+          'https://week9-bf3e9-default-rtdb.firebaseio.com/documents.json',
+          documents
+        )
+        .subscribe(response => {
+          console.log(response);
+        });
+    }
+
 
     getDocuments(): Document[] {
         return this.documents.slice(); //Returns a copy of array
-    }  
+}
+
 
   getDocument(index: string) {
     return this.documents[index];
