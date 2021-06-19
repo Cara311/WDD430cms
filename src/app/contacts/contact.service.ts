@@ -3,6 +3,7 @@ import { Contact } from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +18,32 @@ export class ContactService {
   maxContactId: number;
 
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.contacts = MOCKCONTACTS;
     this.maxContactId = this.getMaxId();
+
+    this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/contacts.json').subscribe((DBContacts: Contact[]) => {
+      this.contacts = DBContacts;
+      this.maxContactId = this.getMaxId();
+      this.contacts= this.contacts.sort((a, b) => a.name > b.name ? 1 : 0);
+    
+      this.contactListChangedEvent;
+
+    }, (error: any) => {
+      console.log('error');
+    });
+  }
+
+  storeContacts() {
+    const contacts = this.getContacts();
+    this.http
+      .put(
+        'https://week9-bf3e9-default-rtdb.firebaseio.com/documents.json',
+        contacts
+      )
+      .subscribe(response => {
+        console.log(response);
+      });
   }
 
   getContacts(): Contact[] {
