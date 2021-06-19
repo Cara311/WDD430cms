@@ -23,7 +23,7 @@ export class MessageService {
           this.maxMessageId = this.getMaxId();
           this.messages= this.messages.sort((a, b) => a.id > b.id ? 1 : 0);
         
-          this.messageChangedEvent.emit(this.messages.slice());
+          this.messageChangedEvent.next(this.messages.slice());
     
         }, (error: any) => {
           console.log('error');
@@ -39,6 +39,7 @@ export class MessageService {
         )
         .subscribe(response => {
           console.log(response);
+          this.messageChangedEvent.next(messages.slice());
         });
     }
 
@@ -61,6 +62,7 @@ export class MessageService {
   addMessage(message: Message) {
     this.messages.push(message);
     this.messageChangedEvent.emit(this.messages.slice());
+    this.storeMessages();
 }
 
 getMaxId(): number {
