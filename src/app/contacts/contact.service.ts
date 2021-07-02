@@ -3,7 +3,7 @@ import { Contact } from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +62,7 @@ export class ContactService {
 
   }
 
-  deleteContact(contact: Contact) {
+  /*deleteContact(contact: Contact) {
     if (!contact) {
       return;
     }
@@ -73,6 +73,27 @@ export class ContactService {
     this.contacts.splice(pos, 1);
     //this.contactListChangedEvent.next(this.contacts.slice());
     this.storeContacts();
+  }*/
+  deleteContact(contact: Contact) {
+
+    if (!contact) {
+      return;
+    }
+
+    const pos = this.contacts.findIndex(d => d.id === contact.id);
+
+    if (pos < 0) {
+      return;
+    }
+
+    // delete from database
+    this.http.delete('http://localhost:3000/documents/' + contact.id)
+      .subscribe(
+        (response: Response) => {
+          this.contacts.splice(pos, 1);
+          //this.sortAndSend();
+        }
+      );
   }
 
   getMaxId(): number {
@@ -88,10 +109,8 @@ export class ContactService {
   }
 
 
-  addContact(newContact: Contact) {
-   /* if (newContact === undefined || newContact === null) {
-      return;
-    } */
+  /*addContact(newContact: Contact) {
+
     if (!newContact) {
       return;
     }
@@ -101,11 +120,34 @@ export class ContactService {
     let documentsListClone = this.contacts.slice();
     //this.contactListChangedEvent.next(documentsListClone);
     this.storeContacts();
+  }*/
+
+addContact(contact: Contact) {
+  if (!contact) {
+    return;
   }
 
+  // make sure id of the new Document is empty
+  contact.id = '';
+
+  const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+  // add to database
+  this.http.post<{ message: string, contact: Contact }>('http://localhost:3000/documents',
+    contact,
+    { headers: headers })
+    .subscribe(
+      (responseData) => {
+        // add new document to documents
+        this.contacts.push(responseData.contact);
+        //this.sortAndSend();
+      }
+    );
+}
 
 
-  updateDocument(originalContact: Contact, newContact: Contact) {
+
+  /*updateContact(originalContact: Contact, newContact: Contact) {
     if (!originalContact || !newContact) {
       return;
     }
@@ -118,6 +160,34 @@ export class ContactService {
     let documentsListClone = this.contacts.slice();
     //this.contactListChangedEvent.next(documentsListClone);
     this.storeContacts();
+  }*/
+
+  updateContact(originalContact: Contact, newContact: Contact) {
+    if (!originalContact || !newContact) {
+      return;
+    }
+
+    const pos = this.contacts.findIndex(d => d.id === originalContact.id);
+
+    if (pos < 0) {
+      return;
+    }
+
+    // set the id of the new Document to the id of the old Document
+    newContact.id = originalContact.id;
+
+
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    // update database
+    this.http.put('http://localhost:3000/documents/' + originalContact.id,
+    newContact, { headers: headers })
+      .subscribe(
+        (response: Response) => {
+          this.contacts[pos] = newContact;
+          //this.sortAndSend();
+        }
+      );
   }
 
 

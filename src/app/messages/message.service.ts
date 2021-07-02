@@ -58,11 +58,11 @@ export class MessageService {
     return null;
   }
 
-  addMessage(message: Message) {
+ /* addMessage(message: Message) {
     this.messages.push(message);
     this.messageChangedEvent.emit(this.messages.slice());
     this.storeMessages();
-}
+}*/
 
 getMaxId(): number {
 
