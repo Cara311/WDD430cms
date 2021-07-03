@@ -69,7 +69,7 @@ app.get('*', (req, res) => {
 });
 
 // Define the port address and tell express to use this port
-const port = process.env.PORT || '2700';
+const port = process.env.PORT || '4200';
 app.set('port', port);
 
 // Create HTTP server.

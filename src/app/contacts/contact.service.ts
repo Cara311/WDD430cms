@@ -18,7 +18,7 @@ export class ContactService {
   maxContactId: number;
 
 
-  constructor(private http: HttpClient) {
+  /*constructor(private http: HttpClient) {
 
     this.contacts = MOCKCONTACTS;
     this.maxContactId = this.getMaxId();
@@ -32,7 +32,23 @@ export class ContactService {
     }, (error: any) => {
       console.log('error');
     });
+  } */
+  constructor(private http: HttpClient) {
+
+    this.contacts = MOCKCONTACTS;
+    this.maxContactId = this.getMaxId();
+
+    this.http.get('http://localhost:3000/documents').subscribe((DBContacts: Contact[]) => {
+      this.contacts = DBContacts;
+      this.maxContactId = this.getMaxId();
+      //this.contacts.sort((a, b) => a.name < b.name ? -1 : 0);
+      this.contactListChangedEvent.next(this.contacts.slice());
+
+    }, (error: any) => {
+      console.log('error');
+    });
   }
+
 
   storeContacts() {
     const contacts = this.getContacts();
@@ -91,7 +107,7 @@ export class ContactService {
       .subscribe(
         (response: Response) => {
           this.contacts.splice(pos, 1);
-          //this.sortAndSend();
+          this.sortAndSend();
         }
       );
   }
@@ -140,7 +156,7 @@ addContact(contact: Contact) {
       (responseData) => {
         // add new document to documents
         this.contacts.push(responseData.contact);
-        //this.sortAndSend();
+        this.sortAndSend();
       }
     );
 }
@@ -185,10 +201,15 @@ addContact(contact: Contact) {
       .subscribe(
         (response: Response) => {
           this.contacts[pos] = newContact;
-          //this.sortAndSend();
+          this.sortAndSend();
         }
       );
   }
+
+   sortAndSend() {
+    this.contacts.sort((a, b) => a.name < b.name ? -1 : 0);
+    this.contactListChangedEvent.next(this.contacts.slice());
+   }
 
 
 

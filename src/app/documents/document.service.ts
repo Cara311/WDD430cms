@@ -102,7 +102,7 @@ export class DocumentService {
       .subscribe(
         (response: Response) => {
           this.documents.splice(pos, 1);
-          //this.sortAndSend();
+          this.sortAndSend();
         }
       );
   }
@@ -195,9 +195,15 @@ updateDocument(originalDocument: Document, newDocument: Document) {
     .subscribe(
       (response: Response) => {
         this.documents[pos] = newDocument;
-        //this.sortAndSend();
+        this.sortAndSend();
       }
     );
+}
+
+sortAndSend() {
+  this.documents.sort((a, b) => a.name < b.name ? -1 : 0);
+  this.documentListChangedEvent.next(this.documents.slice());
+
 }
 
 

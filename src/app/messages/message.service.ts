@@ -2,7 +2,7 @@ import { Message } from './messages.model';
 import {Injectable} from '@angular/core';
 import {MOCKMESSAGES} from './MOCKMESSAGES';
 import { EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -18,9 +18,13 @@ export class MessageService {
         this.messages = MOCKMESSAGES;
         this.maxMessageId = this.getMaxId();
 
-        this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/messages.json').subscribe((DBMessages: Message[]) => {
+       /* this.http.get('https://week9-bf3e9-default-rtdb.firebaseio.com/messages.json').subscribe((DBMessages: Message[]) => {
           this.messages = DBMessages;
-          this.maxMessageId = this.getMaxId();
+          this.maxMessageId = this.getMaxId(); */
+
+          this.http.get('http://localhost:3000/documents').subscribe((DBMessages: Message[]) => {
+            this.messages = DBMessages;
+            this.maxMessageId = this.getMaxId();
         
           this.messageChangedEvent.next(this.messages.slice());
     
@@ -64,6 +68,29 @@ export class MessageService {
     this.storeMessages();
 }*/
 
+addMessage(message: Message) {
+  if (!message) {
+    return;
+  }
+
+  // make sure id of the new Document is empty
+  message.id = '';
+
+  const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+  // add to database
+  this.http.post<{ message: string, document: Message }>('http://localhost:3000/messages',
+    message,
+    { headers: headers })
+    .subscribe(
+      (responseData) => {
+        // add new document to documents
+        this.messages.push(responseData.document);
+        //this.sortAndSend();
+      }
+    );
+}
+
 getMaxId(): number {
 
   var maxId = 0;
@@ -75,5 +102,7 @@ getMaxId(): number {
     return maxId;
   }
 }
+
+
 
 }
